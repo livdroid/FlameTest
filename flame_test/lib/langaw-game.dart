@@ -6,6 +6,7 @@ import 'package:flutter/gestures.dart';
 
 import 'backyard.dart';
 import 'fly.dart';
+import 'housefly.dart';
 
 class LangawGame extends Game {
   Size screenSize;
@@ -29,7 +30,7 @@ class LangawGame extends Game {
   void spawnFly() {
     double x = rnd.nextDouble() * (screenSize.width - tileSize);
     double y = rnd.nextDouble() * (screenSize.height - tileSize);
-    flies.add(Fly(this, x, y));
+    flies.add(HouseFly(this, x, y));
   }
 
   void render(Canvas canvas) {
