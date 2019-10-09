@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flame/sprite.dart';
 
-import 'langaw-game.dart';
+import '../langaw-game.dart';
 
 class HomeView {
   final LangawGame game;

@@ -1,25 +1,30 @@
 import 'dart:math';
 import 'dart:ui';
+
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flame_test/buttons/start-button.dart';
+import 'package:flame_test/score-display.dart';
 import 'package:flame_test/sprites/agilefly.dart';
 import 'package:flame_test/sprites/backyard.dart';
 import 'package:flame_test/sprites/droolerfly.dart';
 import 'package:flame_test/sprites/fly.dart';
 import 'package:flame_test/sprites/housefly.dart';
 import 'package:flame_test/sprites/hungryfly.dart';
-import 'package:flame_test/start-button.dart';
-import 'package:flame_test/view.dart';
+import 'package:flame_test/views/view.dart';
 import 'package:flutter/gestures.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'creditbutton.dart';
-import 'creditview.dart';
+import 'buttons/creditbutton.dart';
+import 'buttons/helpbutton.dart';
+import 'callout.dart';
 import 'flyspawner.dart';
-import 'helpbutton.dart';
-import 'helpview.dart';
-import 'home-view.dart';
-import 'lost-view.dart';
-import 'machorfly.dart';
+import 'high-score-display.dart';
+import 'sprites/machorfly.dart';
+import 'views/creditview.dart';
+import 'views/helpview.dart';
+import 'views/home-view.dart';
+import 'views/lost-view.dart';
 
 class LangawGame extends Game {
   Size screenSize;
@@ -40,19 +45,30 @@ class LangawGame extends Game {
   HelpView helpView;
   CreditsView creditsView;
 
-  LangawGame() {
+  int score;
+  ScoreDisplay scoreDisplay;
+  final SharedPreferences storage;
+  HighscoreDisplay highscoreDisplay;
+
+  LangawGame(this.storage) {
     initialize();
   }
 
   void initialize() async {
+    score = 0;
+
     rnd = Random();
     flies = List<Fly>();
+
     resize(await Flame.util.initialDimensions());
 
     background = Backyard(this);
     startButton = StartButton(this);
     helpButton = HelpButton(this);
     creditsButton = CreditsButton(this);
+
+    scoreDisplay = ScoreDisplay(this);
+    highscoreDisplay = HighscoreDisplay(this);
 
     spawner = FlySpawner(this);
     homeView = HomeView(this);
@@ -86,6 +102,8 @@ class LangawGame extends Game {
 
   void render(Canvas canvas) {
     background.render(canvas);
+    highscoreDisplay.render(canvas);
+    scoreDisplay.render(canvas);
 
     flies.forEach((Fly fly) => fly.render(canvas));
 
@@ -98,12 +116,14 @@ class LangawGame extends Game {
     }
     if (activeView == View.help) helpView.render(canvas);
     if (activeView == View.credits) creditsView.render(canvas);
+    if (activeView == View.playing) scoreDisplay.render(canvas);
   }
 
   void update(double t) {
     spawner.update(t);
     flies.forEach((Fly fly) => fly.update(t));
     flies.removeWhere((Fly fly) => fly.isOffScreen);
+    if (activeView == View.playing) scoreDisplay.update(t);
   }
 
   void resize(Size size) {

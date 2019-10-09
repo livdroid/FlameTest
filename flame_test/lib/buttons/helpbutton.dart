@@ -1,22 +1,23 @@
 import 'dart:ui';
+
 import 'package:flame/sprite.dart';
-import 'package:flame_test/view.dart';
+import 'package:flame_test/views/view.dart';
 
-import 'langaw-game.dart';
+import '../langaw-game.dart';
 
-class CreditsButton {
+class HelpButton {
   final LangawGame game;
   Rect rect;
   Sprite sprite;
 
-  CreditsButton(this.game) {
+  HelpButton(this.game) {
     rect = Rect.fromLTWH(
-      game.screenSize.width - (game.tileSize * 1.25),
+      game.tileSize * .25,
       game.screenSize.height - (game.tileSize * 1.25),
       game.tileSize,
       game.tileSize,
     );
-    sprite = Sprite('ui/icon-credits.png');
+    sprite = Sprite('ui/icon-help.png');
   }
 
   void render(Canvas c) {
@@ -24,6 +25,6 @@ class CreditsButton {
   }
 
   void onTapDown() {
-    game.activeView = View.credits;
+    game.activeView = View.help;
   }
 }

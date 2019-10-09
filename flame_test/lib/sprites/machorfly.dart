@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flame/sprite.dart';
 
-import 'sprites/fly.dart';
-import 'langaw-game.dart';
+import 'fly.dart';
+import '../langaw-game.dart';
 
 class MachoFly extends Fly {
   double get speed => game.tileSize * 2.5;

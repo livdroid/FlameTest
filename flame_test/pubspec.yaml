@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   flame: ^0.15.2
   cupertino_icons: ^0.1.2
+  shared_preferences: ^0.5.1+2
 
 dev_dependencies:
   flutter_test:
@@ -42,3 +43,19 @@ flutter:
     - assets/images/ui/icon-credits.png
     - assets/images/ui/icon-help.png
     - assets/images/ui/start-button.png
+    - assets/audio/sfx/haha1.ogg
+    - assets/audio/sfx/haha2.ogg
+    - assets/audio/sfx/haha3.ogg
+    - assets/audio/sfx/haha4.ogg
+    - assets/audio/sfx/haha5.ogg
+    - assets/audio/sfx/ouch1.ogg
+    - assets/audio/sfx/ouch2.ogg
+    - assets/audio/sfx/ouch3.ogg
+    - assets/audio/sfx/ouch4.ogg
+    - assets/audio/sfx/ouch5.ogg
+    - assets/audio/sfx/ouch6.ogg
+    - assets/audio/sfx/ouch7.ogg
+    - assets/audio/sfx/ouch8.ogg
+    - assets/audio/sfx/ouch9.ogg
+    - assets/audio/sfx/ouch10.ogg
+    - assets/audio/sfx/ouch11.ogg

@@ -1,8 +1,8 @@
 import 'dart:ui';
 import 'package:flame/sprite.dart';
-import 'package:flame_test/view.dart';
+import 'package:flame_test/views/view.dart';
 
-import 'langaw-game.dart';
+import '../langaw-game.dart';
 
 class StartButton {
   final LangawGame game;
@@ -24,6 +24,7 @@ class StartButton {
   void update(double t) {}
 
   void onTapDown() {
+    game.score = 0;
     game.activeView = View.playing;
     game.spawner.start();
   }
