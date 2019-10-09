@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/buttons/start-button.dart';
@@ -17,7 +18,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'buttons/creditbutton.dart';
 import 'buttons/helpbutton.dart';
-import 'callout.dart';
 import 'flyspawner.dart';
 import 'high-score-display.dart';
 import 'sprites/machorfly.dart';
@@ -50,6 +50,9 @@ class LangawGame extends Game {
   final SharedPreferences storage;
   HighscoreDisplay highscoreDisplay;
 
+  AudioPlayer homeBGM;
+  AudioPlayer playingBGM;
+
   LangawGame(this.storage) {
     initialize();
   }
@@ -75,6 +78,13 @@ class LangawGame extends Game {
     lostView = LostView(this);
     helpView = HelpView(this);
     creditsView = CreditsView(this);
+
+    homeBGM = await Flame.audio.loop('bgm/home.mp3', volume: .25);
+    homeBGM.pause();
+    playingBGM = await Flame.audio.loop('bgm/playing.mp3', volume: .25);
+    playingBGM.pause();
+
+    playHomeBGM();
   }
 
   void spawnFly() {
@@ -176,9 +186,24 @@ class LangawGame extends Game {
           didHitAFly = true;
         }
       });
+
       if (activeView == View.playing && !didHitAFly) {
+        Flame.audio.play('sfx/haha' + (rnd.nextInt(5) + 1).toString() + '.ogg');
+        playHomeBGM();
         activeView = View.lost;
       }
     }
+  }
+
+  void playHomeBGM() {
+    playingBGM.pause();
+    playingBGM.seek(Duration.zero);
+    homeBGM.resume();
+  }
+
+  void playPlayingBGM() {
+    homeBGM.pause();
+    homeBGM.seek(Duration.zero);
+    playingBGM.resume();
   }
 }
