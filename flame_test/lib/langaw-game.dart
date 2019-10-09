@@ -1,9 +1,9 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flame_test/bgm.dart';
 import 'package:flame_test/buttons/start-button.dart';
 import 'package:flame_test/score-display.dart';
 import 'package:flame_test/sprites/agilefly.dart';
@@ -20,7 +20,7 @@ import 'buttons/creditbutton.dart';
 import 'buttons/helpbutton.dart';
 import 'buttons/music-button.dart';
 import 'buttons/sound-button.dart';
-import 'flyspawner.dart';
+import 'controller/flyspawner.dart';
 import 'high-score-display.dart';
 import 'sprites/machorfly.dart';
 import 'views/creditview.dart';
@@ -54,18 +54,15 @@ class LangawGame extends Game {
 
   int score;
 
-  AudioPlayer homeBGM;
-  AudioPlayer playingBGM;
-
   LangawGame(this.storage) {
     initialize();
   }
 
-  void initialize() async {
+  Future<void> initialize() async {
     rnd = Random();
     flies = List<Fly>();
     score = 0;
-    resize(await Flame.util.initialDimensions());
+    resize(Size.zero);
 
     background = Backyard(this);
     startButton = StartButton(this);
@@ -82,17 +79,12 @@ class LangawGame extends Game {
     helpView = HelpView(this);
     creditsView = CreditsView(this);
 
-    homeBGM = await Flame.audio.loop('bgm/home.mp3', volume: .25);
-    homeBGM.pause();
-    playingBGM = await Flame.audio.loop('bgm/playing.mp3', volume: .25);
-    playingBGM.pause();
-
-    playHomeBGM();
+    BGM.play(BGMType.home);
   }
 
   void spawnFly() {
     double x = rnd.nextDouble() * (screenSize.width - (tileSize * 2.025));
-    double y = rnd.nextDouble() * (screenSize.height - (tileSize * 2.025));
+    double y = (rnd.nextDouble() * (screenSize.height - (tileSize * 2.025))) + (tileSize * 1.5);
 
     switch (rnd.nextInt(5)) {
       case 0:
@@ -111,18 +103,6 @@ class LangawGame extends Game {
         flies.add(HungryFly(this, x, y));
         break;
     }
-  }
-
-  void playHomeBGM() {
-    playingBGM.pause();
-    playingBGM.seek(Duration.zero);
-    homeBGM.resume();
-  }
-
-  void playPlayingBGM() {
-    homeBGM.pause();
-    homeBGM.seek(Duration.zero);
-    playingBGM.resume();
   }
 
   void render(Canvas canvas) {
@@ -156,6 +136,24 @@ class LangawGame extends Game {
   void resize(Size size) {
     screenSize = size;
     tileSize = screenSize.width / 9;
+
+    background?.resize();
+
+    highscoreDisplay?.resize();
+    scoreDisplay?.resize();
+    flies.forEach((Fly fly) => fly?.resize());
+
+    homeView?.resize();
+    lostView?.resize();
+    helpView?.resize();
+    creditsView?.resize();
+
+    startButton?.resize();
+    helpButton?.resize();
+    creditsButton?.resize();
+    musicButton?.resize();
+    soundButton?.resize();
+
   }
 
   void onTapDown(TapDownDetails d) {
@@ -219,7 +217,7 @@ class LangawGame extends Game {
         if (soundButton.isEnabled) {
           Flame.audio.play('sfx/haha' + (rnd.nextInt(5) + 1).toString() + '.ogg');
         }
-        playHomeBGM();
+        BGM.play(BGMType.home);
         activeView = View.lost;
       }
     }

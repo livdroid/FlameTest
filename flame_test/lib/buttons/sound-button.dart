@@ -12,12 +12,7 @@ class SoundButton {
   bool isEnabled = true;
 
   SoundButton(this.game) {
-    rect = Rect.fromLTWH(
-      game.tileSize * 1.5,
-      game.tileSize * .25,
-      game.tileSize,
-      game.tileSize,
-    );
+    resize();
     enabledSprite = Sprite('ui/icon-sound-enabled.png');
     disabledSprite = Sprite('ui/icon-sound-disabled.png');
   }
@@ -28,6 +23,15 @@ class SoundButton {
     } else {
       disabledSprite.renderRect(c, rect);
     }
+  }
+
+  void resize() {
+    rect = Rect.fromLTWH(
+      game.tileSize * 1.5,
+      game.tileSize * .25,
+      game.tileSize,
+      game.tileSize,
+    );
   }
 
   void onTapDown() {

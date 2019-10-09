@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/sprite.dart';
+import 'package:flame_test/bgm.dart';
 
 import '../langaw-game.dart';
 
@@ -12,12 +13,7 @@ class MusicButton {
   bool isEnabled = true;
 
   MusicButton(this.game) {
-    rect = Rect.fromLTWH(
-      game.tileSize * .25,
-      game.tileSize * .25,
-      game.tileSize,
-      game.tileSize,
-    );
+    resize();
     enabledSprite = Sprite('ui/icon-music-enabled.png');
     disabledSprite = Sprite('ui/icon-music-disabled.png');
   }
@@ -30,15 +26,22 @@ class MusicButton {
     }
   }
 
+  void resize() {
+    rect = Rect.fromLTWH(
+      game.tileSize * .25,
+      game.tileSize * .25,
+      game.tileSize,
+      game.tileSize,
+    );
+  }
+
   void onTapDown() {
     if (isEnabled) {
       isEnabled = false;
-      game.homeBGM.setVolume(0);
-      game.playingBGM.setVolume(0);
+      BGM.pause();
     } else {
       isEnabled = true;
-      game.homeBGM.setVolume(.25);
-      game.playingBGM.setVolume(.25);
+      BGM.resume();
     }
   }
 }

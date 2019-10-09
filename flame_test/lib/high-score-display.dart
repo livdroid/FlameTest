@@ -52,4 +52,39 @@ class HighscoreDisplay {
   void render(Canvas c) {
     painter.paint(c, position);
   }
+
+  void resize() {
+    int highscore = game.storage.getInt('highscore') ?? 0;
+
+    Shadow shadow = Shadow(
+      blurRadius: game.tileSize * .0625,
+      color: Color(0xff000000),
+      offset: Offset.zero,
+    );
+
+    painter.text = TextSpan(
+      text: 'High-score: ' + highscore.toString(),
+      style: TextStyle(
+        color: Color(0xffffffff),
+        fontSize: game.tileSize * .75,
+        shadows: <Shadow>[
+          shadow,
+          shadow,
+          shadow,
+          shadow,
+          shadow,
+          shadow,
+          shadow,
+          shadow
+        ],
+      ),
+    );
+
+    if (painter.text == null) return;
+    painter.layout();
+    position = Offset(
+      game.screenSize.width - (game.tileSize * .25) - painter.width,
+      game.tileSize * .25,
+    );
+  }
 }

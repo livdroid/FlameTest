@@ -1,7 +1,7 @@
 
 import 'package:flame_test/sprites/fly.dart';
 
-import 'langaw-game.dart';
+import '../langaw-game.dart';
 
 class FlySpawner {
   final LangawGame game;

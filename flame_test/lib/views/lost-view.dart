@@ -9,12 +9,7 @@ class LostView {
   Sprite sprite;
 
   LostView(this.game) {
-    rect = Rect.fromLTWH(
-      game.tileSize,
-      (game.screenSize.height / 2) - (game.tileSize * 5),
-      game.tileSize * 7,
-      game.tileSize * 5,
-    );
+    resize();
     sprite = Sprite('bg/lose-splash.png');
   }
 
@@ -22,5 +17,12 @@ class LostView {
     sprite.renderRect(c, rect);
   }
 
-  void update(double t) {}
+  void resize() {
+    rect = Rect.fromLTWH(
+      game.tileSize,
+      (game.screenSize.height / 2) - (game.tileSize * 5),
+      game.tileSize * 7,
+      game.tileSize * 5,
+    );
+  }
 }

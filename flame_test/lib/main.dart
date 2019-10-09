@@ -1,5 +1,6 @@
 import 'package:flame/flame.dart';
 import 'package:flame/util.dart';
+import 'package:flame_test/bgm.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,8 +13,12 @@ void main() async {
   await flameUtil.fullScreen();
   await flameUtil.setOrientation(DeviceOrientation.portraitUp);
 
-  Flame.images.loadAll(<String>[
+  SharedPreferences storage = await SharedPreferences.getInstance();
+
+  await Flame.images.loadAll(<String>[
     'bg/backyard.png',
+    'bg/lose-splash.png',
+    'branding/title.png',
     'flies/agile-fly-1.png',
     'flies/agile-fly-2.png',
     'flies/agile-fly-dead.png',
@@ -29,18 +34,22 @@ void main() async {
     'flies/macho-fly-1.png',
     'flies/macho-fly-2.png',
     'flies/macho-fly-dead.png',
-    'bg/lose-splash.png',
-    'branding/title.png',
+    'ui/callout.png',
     'ui/dialog-credits.png',
     'ui/dialog-help.png',
     'ui/icon-credits.png',
     'ui/icon-help.png',
+    'ui/icon-music-disabled.png',
+    'ui/icon-music-enabled.png',
+    'ui/icon-sound-disabled.png',
+    'ui/icon-sound-enabled.png',
     'ui/start-button.png',
-    'ui/callout.png',
   ]);
 
   Flame.audio.disableLog();
-  Flame.audio.loadAll(<String>[
+  await BGM.preload();
+
+  await Flame.audio.loadAll(<String>[
     'sfx/haha1.ogg',
     'sfx/haha2.ogg',
     'sfx/haha3.ogg',
@@ -59,13 +68,12 @@ void main() async {
     'sfx/ouch11.ogg',
   ]);
 
-  //Returns a future !!!
-  SharedPreferences storage = await SharedPreferences.getInstance();
-
   LangawGame game = LangawGame(storage);
   runApp(game.widget);
 
   TapGestureRecognizer tapper = TapGestureRecognizer();
   tapper.onTapDown = game.onTapDown;
   flameUtil.addGestureRecognizer(tapper);
+
+  WidgetsBinding.instance.addObserver(BGMHandler());
 }
